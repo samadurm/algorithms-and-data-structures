@@ -1,5 +1,6 @@
 #include "linked_list.h"
 #include <iostream>
+#include <exception>
 
 Node::Node(int value)
     : data(value)
@@ -66,4 +67,46 @@ void Linked_list::pop_back()
         weak_cur = strong_cur->next;
     }
     m_size--;
+}
+
+size_t Linked_list::size() const
+{
+    return m_size;
+}
+
+int Linked_list::at(size_t index) const
+{
+    if (index >= m_size)
+    {
+        throw std::out_of_range("Out of range access when calling Linked_list::at()");
+    }
+
+    int val{-1};
+    std::weak_ptr<Node> weak_cur = m_head;
+    for (size_t i = 0; i <= index; ++i)
+    {
+        if (const auto strong_cur = weak_cur.lock())
+        {
+            weak_cur = strong_cur->next;
+            if (i == index)
+            {
+                val = strong_cur->data;
+            }
+        }
+        else
+        {
+            throw std::bad_weak_ptr();
+        }
+    }
+    return val;
+}
+
+int Linked_list::back() const
+{
+    return m_tail ? m_tail->data : -1;
+}
+
+int Linked_list::front() const
+{
+    return m_head ? m_head->data : -1;
 }
