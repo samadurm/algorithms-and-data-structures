@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cstdlib>
+#include <memory>
 
 struct Node
 {
     Node(int value);
-    Node* next{nullptr};
+    std::shared_ptr<Node> next;
     int data{-1};
 };
 
@@ -19,8 +20,8 @@ public:
     void pop_back();
 
 private:
-    Node* m_head;
-    Node* m_tail;
+    std::shared_ptr<Node> m_head;
+    std::shared_ptr<Node> m_tail;
 
     size_t m_size{0};
 };

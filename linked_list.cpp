@@ -13,11 +13,11 @@ void Linked_list::print_all() const
 {
     std::cout << "\nSize: " << m_size << "\n";
 
-    Node* current = m_head;
-    while (current)
+    std::weak_ptr<Node> weak_cur = m_head;
+    while (const auto cur = weak_cur.lock())
     {
-        std::cout << current->data << " ";
-        current = current->next;
+        std::cout << cur->data << " ";
+        weak_cur = cur->next;
     }
     std::cout << "\n";
 }
@@ -28,16 +28,16 @@ void Linked_list::push_back(int value)
 {
     if (!m_size)
     {   // first insert
-        m_head = new Node(value);
+        m_head = std::make_shared<Node>(value);
         m_tail = m_head;
     }
     else 
     {   // regular insert
-        m_tail->next = new Node(value);
+        m_tail->next = std::make_shared<Node>(value);
         m_tail = m_tail->next;
     }
     m_size++;
-}
+}   
 
 // O(N) time
 // O(1) space
@@ -49,23 +49,21 @@ void Linked_list::pop_back()
     }
     else if (m_size == 1)
     {
-        delete m_head;
         m_head = nullptr;
         m_size--;
         return;
     }
 
-    Node* prev = m_head;
-    Node* cur = m_head->next;
-
-    while (cur->next)
+    // find the new tail, 1 node before previous tail
+    std::weak_ptr<Node> weak_cur = m_head;
+    while (const auto strong_cur = weak_cur.lock())
     {
-        cur = cur->next;
-        prev = prev->next;
+        if (!strong_cur->next)
+        {
+            m_tail = strong_cur;
+            break;
+        }
+        weak_cur = strong_cur->next;
     }
-
-    delete cur;
-    prev->next = nullptr;
     m_size--;
-    m_tail = prev;
 }
