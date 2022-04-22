@@ -16,6 +16,7 @@ public:
     void print_all() const;
 
     void push_back(int value);
+    void pop_back();
 
 private:
     Node* m_head;

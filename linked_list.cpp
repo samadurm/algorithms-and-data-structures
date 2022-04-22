@@ -38,3 +38,34 @@ void Linked_list::push_back(int value)
     }
     m_size++;
 }
+
+// O(N) time
+// O(1) space
+void Linked_list::pop_back()
+{
+    if (!m_size)
+    {
+        return;
+    }
+    else if (m_size == 1)
+    {
+        delete m_head;
+        m_head = nullptr;
+        m_size--;
+        return;
+    }
+
+    Node* prev = m_head;
+    Node* cur = m_head->next;
+
+    while (cur->next)
+    {
+        cur = cur->next;
+        prev = prev->next;
+    }
+
+    delete cur;
+    prev->next = nullptr;
+    m_size--;
+    m_tail = prev;
+}
