@@ -21,8 +21,11 @@ public:
     void erase();
     void reserve(size_t capacity);
 
+    void remove(size_t index);
+    void insert(size_t index, int value);
+
 private:
-    void reallocate_();
+    void reallocate_(size_t capacity);
 
     int* m_data;
     size_t m_capacity{10}, m_size{0};
