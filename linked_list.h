@@ -6,6 +6,7 @@
 struct Node
 {
     Node(int value);
+    ~Node();
     std::shared_ptr<Node> next;
     int data{-1};
 };
@@ -24,6 +25,7 @@ public:
     int back() const;
     int front() const;
 
+    void erase();
 
 private:
     std::shared_ptr<Node> m_head;

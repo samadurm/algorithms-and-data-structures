@@ -6,6 +6,10 @@ Node::Node(int value)
     : data(value)
 {
 }
+Node::~Node()
+{
+    std::cout << "Called Node destructor on value: " << data << "\n";
+}
 
 
 Linked_list::Linked_list() = default;
@@ -109,4 +113,18 @@ int Linked_list::back() const
 int Linked_list::front() const
 {
     return m_head ? m_head->data : -1;
+}
+
+// Time: O(N)
+// Space: O(1)
+void Linked_list::erase()
+{
+    if (!m_head)
+    {
+        return;
+    }
+
+    m_head.reset();
+    m_tail.reset();
+    m_size = 0;    
 }
